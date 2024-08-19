@@ -1,0 +1,46 @@
+---
+import '../styles/navigation.css';
+const { section, topics_with_files, topic, file } = Astro.props;
+const TopicUrls = Object.keys(topics_with_files).map((to) => {
+  // click the topic and go to the first file
+  const first_file = topics_with_files[to][0] ? topics_with_files[to][0] : "";
+  return [
+      section ? `/note/${section}/${to}/${first_file}` : "/note",
+      to,
+    ]
+  }
+);
+---
+
+<aside class="sidebar">
+  <ul>
+    <li>
+      <a href=`/note${section != "Home" ? "/"+section+"/index" : ""}` class="a1">
+        {section}
+      </a>
+    </li>
+    {
+      TopicUrls.map(([url, to]) => (
+        <li>
+          <div style="justify-content: space-between; display: flex; margin-bottom: 10px;">
+            <a href={url} class="a2">{to}</a>
+            {to === topic && <svg style="display: flex; height: 20px;" xmlns="http://www.w3.org/2000/svg" id="arrow" x="0" y="0" version="1.1" viewBox="0 0 29 29" xml:space="preserve"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="m20.5 11.5-6 6-6-6"></path></svg>}
+          </div>
+          {to === topic && (
+            <ul>
+              {topics_with_files[topic].map((file_) => {
+                let fi = file_;
+                return file_ === file ? (
+                  <li><a href={fi} class="a3">{fi}</a></li>
+                ) : (
+                  <li><a href={fi} class="a4">{fi}</a></li>
+                );
+              })}
+            </ul>
+          )}
+        </li>
+      ))
+    }
+  </ul>
+</aside>
+

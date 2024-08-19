@@ -1,0 +1,35 @@
+---
+import '../styles/header.css';
+const { sections, section } = Astro.props;
+const Urls = sections.map((section) => [
+  ["note.typ", "note.md"].includes(section) ? "/note" : `/note/${section}/index`,
+  // section,
+  ["note.typ", "note.md"].includes(section) ? "Home" : section,
+]);
+---
+
+<header>
+  <div class="caption">
+    <a href="/docs/notebook">
+      <img src="/src/assets/avatar.jpg" style="height: 80%; border-radius: 50%; " />
+    </a>
+    <div style="width:1em"></div>
+    <h1 style="font-weight: bold;">笔记本标题</h1>
+    <div style="width:5em"></div>
+    <nav>
+      {Urls.map(([url, sect]) => <a href={url}>
+        {sect === section ? <strong>{sect}</strong> : sect}
+      </a>)}
+    </nav>
+  </div>
+  <div style="display: flex;">
+    <a href="/" style="display: flex;">
+      <img src="/src/assets/house.svg" style="height: 2em;"/>
+      <div style="margin-left: 8px; margin-top: 3px; font-size: large;"></div>
+    </a>
+    <a href="https://github.com/crd2333" style="display: flex; margin-left: 20px;">
+      <img src="/src/assets/github-brands-solid.svg" style="height: 2em;"/>
+      <div style="margin-left: 8px; margin-top: 3px; font-size: large;"></div>
+    </a>
+  </div>
+</header>
