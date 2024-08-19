@@ -144,7 +144,7 @@ export async function getStaticPaths() {
 
         paths.push({
           params: {
-            slug: join("note", section, topic, file.replace(/\.(typ|md)$/, '')),
+            slug: `note/${section}/${topic}/${file.replace(/\.(typ|md)$/, '')}`,
           },
           props: {
             frontmatter,
@@ -167,7 +167,7 @@ export async function getStaticPaths() {
     const content = match === null ? code : code.slice(match[0].length);
     paths.push({
       params: {
-        slug: join("note", section, "index"),
+        slug: `note/${section}/index`,
       },
       props: {
         frontmatter,
