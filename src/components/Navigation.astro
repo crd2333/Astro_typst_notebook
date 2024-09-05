@@ -31,9 +31,9 @@ const TopicUrls = Object.keys(topics_with_files).map((to) => {
               {topics_with_files[topic].map((file_) => {
                 let fi = file_;
                 return file_ === file ? (
-                  <li><a href={fi} class="a3">{fi}</a></li>
+                  <li><a href=`/note/${section}/${topic}/${fi}` class="a3">{fi}</a></li>
                 ) : (
-                  <li><a href={fi} class="a4">{fi}</a></li>
+                  <li><a href=`/note/${section}/${topic}/${fi}` class="a4">{fi}</a></li>
                 );
               })}
             </ul>
