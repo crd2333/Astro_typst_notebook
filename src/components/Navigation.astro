@@ -1,6 +1,10 @@
 ---
 import '../styles/navigation.css';
 const { section, topics_with_files, topic, file } = Astro.props;
+// section: current section
+// topics_with_files: {topic: [file1, file2, ...], ...}
+// topic: current topic
+// file: current file
 const TopicUrls = Object.keys(topics_with_files).map((to) => {
   // click the topic and go to the first file
   const first_file = topics_with_files[to][0] ? topics_with_files[to][0] : "";
@@ -9,38 +13,45 @@ const TopicUrls = Object.keys(topics_with_files).map((to) => {
       to,
     ]
   }
-);
+); // TopicUrls: [[url, topic], ...]
+// if current topic has only one file called index.typ or index.md, then no subfiles and no arrow
+const topic_has_only_index: boolean = topics_with_files[topic]?.length === 1 && topics_with_files[topic][0] === "index";
 ---
 
 <aside class="sidebar">
   <ul>
     <li>
-      <a href=`/note${section != "Home" ? "/"+section+"/index" : ""}` class="a1">
-        {section}
-      </a>
+      <a href=`/note${section != "Home" ? "/"+section+"/index" : ""}` class="a1">{section}</a>
     </li>
-    {
-      TopicUrls.map(([url, to]) => (
-        <li>
-          <div style="justify-content: space-between; display: flex; margin-bottom: 10px;">
-            <a href={url} class="a2">{to}</a>
-            {to === topic && <svg style="display: flex; height: 20px;" xmlns="http://www.w3.org/2000/svg" id="arrow" x="0" y="0" version="1.1" viewBox="0 0 29 29" xml:space="preserve"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="m20.5 11.5-6 6-6-6"></path></svg>}
-          </div>
-          {to === topic && (
-            <ul>
-              {topics_with_files[topic].map((file_) => {
-                let fi = file_;
-                return file_ === file ? (
-                  <li><a href=`/note/${section}/${topic}/${fi}` class="a3">{fi}</a></li>
-                ) : (
-                  <li><a href=`/note/${section}/${topic}/${fi}` class="a4">{fi}</a></li>
-                );
-              })}
-            </ul>
-          )}
-        </li>
-      ))
-    }
+    {TopicUrls.map(([url, to]) => (
+      <li>
+        <div style="justify-content: space-between; display: flex; margin-bottom: 10px;">
+          {
+            to === topic && topic_has_only_index ?
+            <a href={url} class="a2_choose">{to}</a> :
+            <a href={url} class="a2_not_choose">{to}</a>
+          }
+          {
+            topic_has_only_index ? null :
+            to === topic ?
+            <svg class="arrow" xmlns="http://www.w3.org/2000/svg" id="arrow" x="0" y="0" version="1.1" viewBox="0 0 29 29" xml:space="preserve"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="m20.5 11.5-6 6-6-6"></path></svg> :
+            <svg class="arrow" xmlns="http://www.w3.org/2000/svg" id="arrow" x="0" y="0" version="1.1" viewBox="0 0 29 29" xml:space="preserve"><path fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="2" d="M11.5 8.5l6 6-6 6"/></svg>
+          }
+        </div>
+        {to === topic && !topic_has_only_index && (
+          <ul>
+            {topics_with_files[topic].map((file_: string) => {
+              let fi = file_;
+              return file_ === file ? (
+                <li><a href=`/note/${section}/${topic}/${fi}` class="a_choose">{fi}</a></li>
+              ) : (
+                <li><a href=`/note/${section}/${topic}/${fi}` class="a_not_choose">{fi}</a></li>
+              );
+            })}
+          </ul>
+        )}
+      </li>
+    ))}
   </ul>
 </aside>
 
